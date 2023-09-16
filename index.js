@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-dotenv.config();
 import advMangaWeb from "./contorolers/advMangaWeb.js";
 import { advScraper } from "./advanceScrapper.js";
+
+dotenv.config();
 
 const port = process.env.PORT || process.env.DB_PORT;
 
