@@ -1,5 +1,5 @@
 import db from "../database/dbConnection.js";
-import { scrapeTotal } from "../scrapper.js";
+import { scrapeTotal } from "../advanceScrapper.js";
 const advMangaWeb = async (values) => {
   const valuesArray = [
     values.websiteName,

@@ -34,7 +34,7 @@ const advScraper = async (url, elemClass) => {
   }
 };
 
-const scrapTotal = async (url, elemClass) => {
+const scrapeTotal = async (url, elemClass) => {
   let totalChapter = 0;
   const regex = /chapterNumberHere/;
 
@@ -94,4 +94,4 @@ const scrapTotal = async (url, elemClass) => {
   console.log({ total: totalChapter });
   return totalChapter;
 };
-export { advScraper, scrapTotal };
+export { advScraper, scrapeTotal };
