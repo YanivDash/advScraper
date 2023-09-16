@@ -108,12 +108,14 @@ const scrapeTotal = async (url, elemClass) => {
 };
 
 const totalChapterLinks = async (url, elemClass) => {
+  // const url = "https://w63.1piecemanga.com/";
+  // const elemClass = "a[href*=one-piece-chapter]";
   let data = [];
 
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     ignoreDefaultArgs: ["--disable-extensions"],
-    headless: "new",
+    headless: false,
   });
 
   try {
@@ -134,9 +136,14 @@ const totalChapterLinks = async (url, elemClass) => {
         `No img elemments with class ${elemClass} found on the page.`
       );
     }
-    console.log(data);
 
-    return data.length - 1;
+    const totalChapters = data.length + 1;
+    const firstChapter = data[0];
+    const lastChapter = data[-1];
+
+    console.log({ totalChapters, firstChapter, lastChapter });
+
+    return { totalChapters, firstChapter, lastChapter };
   } catch (error) {
     console.log(error);
   } finally {
