@@ -115,7 +115,7 @@ const totalChapterLinks = async (url, elemClass) => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     ignoreDefaultArgs: ["--disable-extensions"],
-    headless: false,
+    headless: "new",
   });
 
   try {
