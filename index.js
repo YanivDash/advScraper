@@ -35,6 +35,10 @@ app.post("/advCreateManga", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.json({ working: "up and running here" });
+});
+
 app.post("/advChapter", async (req, res) => {
   try {
     const url = `${req.body.url}`;
