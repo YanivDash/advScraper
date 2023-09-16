@@ -11,8 +11,10 @@ const advMangaWeb = async (values) => {
   ];
   let totalChapterD = 0;
   await totalChapterLinks(values.websiteName, values.mangaClass).then((d) => {
-    valuesArray.push(d);
-    totalChapterD = d;
+    valuesArray.push(d.totalChapters);
+    valuesArray.push(d.firstChapter);
+    valuesArray.push(d.lastChapter);
+    totalChapterD = d.totalChapters;
   });
 
   let message;
@@ -23,7 +25,7 @@ const advMangaWeb = async (values) => {
     return message;
   }
 
-  const sql = `INSERT INTO mangalist (\`websiteName\`, \`mangaName\`, \`mangaCover\`, \`mangaLink\`, \`mangaClass\`,\`totalChapter\`)VALUES (?, ?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO mangalist (\`websiteName\`, \`mangaName\`, \`mangaCover\`, \`mangaLink\`, \`mangaClass\`,\`totalChapter\`,\`firstChapter\`,\`lastChapter\`)VALUES (?, ?, ?, ?, ?, ? , ? , ?)`;
 
   try {
     const result = await new Promise((resolve, reject) => {

@@ -107,9 +107,9 @@ const scrapeTotal = async (url, elemClass) => {
   return totalChapter;
 };
 
-const totalChapterLinks = async (url, elemClass) => {
-  // const url = "https://w63.1piecemanga.com/";
-  // const elemClass = "a[href*=one-piece-chapter]";
+const totalChapterLinks = async () => {
+  const url = "https://w63.1piecemanga.com/";
+  const elemClass = "a[href*=one-piece-chapter]";
   let data = [];
 
   const browser = await puppeteer.launch({
@@ -138,8 +138,8 @@ const totalChapterLinks = async (url, elemClass) => {
     }
 
     const totalChapters = data.length + 1;
-    const firstChapter = data[0];
-    const lastChapter = data[-1];
+    const firstChapter = data[data.length - 1];
+    const lastChapter = data[0];
 
     console.log({ totalChapters, firstChapter, lastChapter });
 
@@ -186,5 +186,6 @@ const testingThree = async () => {
     await browser.close();
   }
 };
+totalChapterLinks();
 
 export { advScraper, scrapeTotal, totalChapterLinks };
