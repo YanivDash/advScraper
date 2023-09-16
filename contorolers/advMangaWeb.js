@@ -1,5 +1,6 @@
 import db from "../database/dbConnection.js";
 import { scrapeTotal } from "../advanceScrapper.js";
+
 const advMangaWeb = async (values) => {
   const valuesArray = [
     values.websiteName,
@@ -16,7 +17,7 @@ const advMangaWeb = async (values) => {
 
   let message;
 
-  if (totalChapterD < -1) {
+  if (totalChapterD < -1 || totalChapterD > 5500) {
     message = "could not scrape total chapter";
     console.log(message);
     return message;

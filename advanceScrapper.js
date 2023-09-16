@@ -6,6 +6,7 @@ const advScraper = async (url, elemClass) => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     ignoreDefaultArgs: ["--disable-extensions"],
+    headless: "new",
   });
 
   try {
@@ -37,6 +38,7 @@ const advScraper = async (url, elemClass) => {
 
 const scrapeTotal = async (url, elemClass) => {
   let totalChapter = 0;
+  console.log(url, elemClass);
   const regex = /chapterNumberHere/;
 
   let leap = 1000;
@@ -48,6 +50,7 @@ const scrapeTotal = async (url, elemClass) => {
     const browser = await puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
       ignoreDefaultArgs: ["--disable-extensions"],
+      headless: "new",
     });
     console.log("bowser running");
     try {
@@ -64,6 +67,11 @@ const scrapeTotal = async (url, elemClass) => {
       browser.close();
     } finally {
       browser.close();
+    }
+
+    if (match > 6000) {
+      console.log(match);
+      return match;
     }
 
     if (imageUrl) {
