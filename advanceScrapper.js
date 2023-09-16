@@ -44,7 +44,7 @@ const scrapeTotal = async (url, elemClass) => {
   let imageUrl;
 
   while (true) {
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     console.log("bowser running");
     try {
       const page = await browser.newPage();
