@@ -4,7 +4,7 @@ const advScraper = async (url, elemClass) => {
   let data = [];
 
   const browser = await puppeteer.launch({
-    headless: "new",
+    headless: true,
   });
 
   try {
@@ -44,7 +44,7 @@ const scrapeTotal = async (url, elemClass) => {
   let imageUrl;
 
   while (true) {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     console.log("bowser running");
     try {
       const page = await browser.newPage();
