@@ -106,4 +106,78 @@ const scrapeTotal = async (url, elemClass) => {
   console.log({ total: totalChapter });
   return totalChapter;
 };
-export { advScraper, scrapeTotal };
+
+const totalChapterLinks = async (url, elemClass) => {
+  let data = [];
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    ignoreDefaultArgs: ["--disable-extensions"],
+    headless: "new",
+  });
+
+  try {
+    const page = await browser.newPage();
+    await page.goto(`${url}`, {
+      waitUntil: "domcontentloaded",
+    });
+
+    const totalLinks = await page.$$eval(`${elemClass}`, (links) => {
+      return links.map((link) => link.href);
+    });
+
+    if (totalLinks.length > 0) {
+      console.log(`elemments with class ${elemClass}`);
+      totalLinks.forEach((src) => data.push(src));
+    } else {
+      console.log(
+        `No img elemments with class ${elemClass} found on the page.`
+      );
+    }
+    console.log(data);
+
+    return data.length - 1;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await browser.close();
+  }
+};
+
+const testingThree = async () => {
+  let data = [];
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    ignoreDefaultArgs: ["--disable-extensions"],
+    headless: "new",
+  });
+
+  try {
+    const page = await browser.newPage();
+    await page.goto(`${url}`, {
+      waitUntil: "domcontentloaded",
+    });
+
+    const imgSrcs = await page.$$eval(`img${elemClass}`, (imgs) => {
+      return imgs.map((img) => img.src);
+    });
+
+    if (imgSrcs.length > 0) {
+      console.log(`elemments with class ${elemClass}`);
+      imgSrcs.forEach((src) => data.push(src));
+    } else {
+      console.log(
+        `No img elemments with class ${elemClass} found on the page.`
+      );
+    }
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await browser.close();
+  }
+};
+
+export { advScraper, scrapeTotal, totalChapterLinks };

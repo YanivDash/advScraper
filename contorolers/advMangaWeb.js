@@ -1,5 +1,5 @@
 import db from "../database/dbConnection.js";
-import { scrapeTotal } from "../advanceScrapper.js";
+import { totalChapterLinks } from "../advanceScrapper.js";
 
 const advMangaWeb = async (values) => {
   const valuesArray = [
@@ -10,7 +10,7 @@ const advMangaWeb = async (values) => {
     values.mangaClass,
   ];
   let totalChapterD = 0;
-  await scrapeTotal(values.mangaLink, values.mangaClass).then((d) => {
+  await totalChapterLinks(values.websiteName, values.mangaClass).then((d) => {
     valuesArray.push(d);
     totalChapterD = d;
   });
@@ -38,6 +38,7 @@ const advMangaWeb = async (values) => {
 
     if (result) {
       const message = `successfully added to dataBase`;
+      console.log(result);
       return message;
     }
   } catch (error) {
