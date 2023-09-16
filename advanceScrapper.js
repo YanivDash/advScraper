@@ -4,7 +4,8 @@ const advScraper = async (url, elemClass) => {
   let data = [];
 
   const browser = await puppeteer.launch({
-    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    ignoreDefaultArgs: ["--disable-extensions"],
   });
 
   try {
@@ -44,7 +45,10 @@ const scrapeTotal = async (url, elemClass) => {
   let imageUrl;
 
   while (true) {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      ignoreDefaultArgs: ["--disable-extensions"],
+    });
     console.log("bowser running");
     try {
       const page = await browser.newPage();
