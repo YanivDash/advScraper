@@ -12,10 +12,17 @@ const port = process.env.PORT || process.env.DB_PORT;
 const app = express();
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://manganexus-library.netlify.app"
+  );
+  next();
+});
 app.use(
   cors({
     origin: ["https://manganexus-library.netlify.app"],
-    methods: ["POST", "GET"],
+    methods: ["POST", "GET", "DELETE"],
     credentials: true,
   })
 );
