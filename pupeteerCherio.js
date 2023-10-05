@@ -70,7 +70,7 @@ const websiteScraper = async (url, nextSelecter, blockClass) => {
     }
     return false;
   });
-
+  console.log("the pupcherio is done", filteredData[0]);
   return filteredData;
 };
 
