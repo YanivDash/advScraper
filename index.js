@@ -26,7 +26,7 @@ app.post("/advCreateManga", async (req, res) => {
     if (!data) {
       return res.status(400).json({ error: "Invalid request data." });
     }
-    const { url, blockClass, nextSelecter, mangaClass } = data;
+    const { url, blockClass, nextSelecter, mangaClass, mangaType } = data;
     let allManga = await websiteScraper(url, nextSelecter, blockClass);
 
     let result;
@@ -38,7 +38,7 @@ app.post("/advCreateManga", async (req, res) => {
         mangaCover: imgSrc,
         mangaName: title,
         mangaClass,
-        mangaType: "manhwa",
+        mangaType,
       });
     });
 
