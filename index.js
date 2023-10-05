@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 import advMangaWeb from "./contorolers/advMangaWeb.js";
 // import { advScraper } from "./advanceScrapper.js";
 import websiteScraper from "./pupeteerCherio.js";
+import getAllManga from "./contorolers/getAllManga.js";
+import updateTotalChapter from "./contorolers/updateTotalChapter.js";
+import { updateChapter } from "./advanceCherio.js";
 
 dotenv.config();
 
@@ -56,6 +59,35 @@ app.post("/advCreateManga", async (req, res) => {
       .status(500)
       .json({ error: "An error occurred while creating the manga." });
   }
+});
+
+const chapterUpdate = async () => {
+  try {
+    const data = await getAllManga();
+
+    if (!data || data.length <= 0) {
+      console.log("no data found in database");
+      return res.status(400).json({ error: "Invalid request data." });
+    }
+    for (const element of data) {
+      const { id, websiteName, totalChapter } = element;
+      let newTotalChapter = await updateChapter(websiteName);
+
+      await updateTotalChapter({
+        id,
+        newTotalChapter,
+        totalChapter,
+      });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "An error occurred." });
+  }
+};
+
+cron.schedule("45 16 * * *", (err) => {
+  console.log("Running API request...");
+  chapterUpdate();
 });
 
 app.listen(port, () => {
