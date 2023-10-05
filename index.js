@@ -7,6 +7,7 @@ import websiteScraper from "./pupeteerCherio.js";
 import getAllManga from "./contorolers/getAllManga.js";
 import updateTotalChapter from "./contorolers/updateTotalChapter.js";
 import { updateChapter } from "./advanceCherio.js";
+import cron from "node-cron";
 
 dotenv.config();
 
