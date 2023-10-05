@@ -86,7 +86,7 @@ const chapterUpdate = async () => {
   }
 };
 
-cron.schedule("45 16 * * *", (err) => {
+cron.schedule("51 16 * * *", (err) => {
   console.log("Running API request...");
   chapterUpdate();
 });
