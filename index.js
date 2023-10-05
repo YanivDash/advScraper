@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["https://elegant-daifuku-1dd9e4.netlify.app"],
+    origin: ["https://manganexus-library.netlify.app"],
     methods: ["POST", "GET"],
     credentials: true,
   })
@@ -26,7 +26,7 @@ app.post("/advCreateManga", async (req, res) => {
     if (!data) {
       return res.status(400).json({ error: "Invalid request data." });
     }
-    const { url, blockClass, nextSelecter, mangaClass, mangaType } = data;
+    const { url, blockClass, nextSelecter, mangaType, mangaClass } = data;
     let allManga = await websiteScraper(url, nextSelecter, blockClass);
 
     let result;
