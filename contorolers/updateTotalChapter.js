@@ -14,6 +14,7 @@ const updateTotalChapter = async (values) => {
     dateUpdate = CURRENT_TIMESTAMP
     WHERE id = ?;`;
   } else {
+    console.log("up to date");
     return;
   }
 
@@ -37,6 +38,7 @@ const updateTotalChapter = async (values) => {
           const message = `${id}:${newTotalChapter}`;
 
           if (result) {
+            console.log("updated");
             return message;
           }
         }
