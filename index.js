@@ -57,3 +57,7 @@ app.post("/advCreateManga", async (req, res) => {
       .json({ error: "An error occurred while creating the manga." });
   }
 });
+
+app.listen(port, () => {
+  console.log(`listening on port ${port}`);
+});
