@@ -140,7 +140,7 @@ const totalChapterLinks = async () => {
     const totalChapters = data.length + 1;
     const firstChapter = data[data.length - 1];
     const lastChapter = data[0];
-
+    console.log(data);
     console.log({ totalChapters, firstChapter, lastChapter });
 
     return { totalChapters, firstChapter, lastChapter };
@@ -152,40 +152,59 @@ const totalChapterLinks = async () => {
 };
 
 const testingThree = async () => {
+  const url = "https://toonily.net/manga/martial-peak/chapter-3555/";
+  const elemClass = "png";
   let data = [];
+  let currentIndex = 0;
+  let imgType = ["jpg", "jpeg", "chapter", "png"];
+  for (let i = imgType.length - 1; i >= 0; i--) {
+    imgType[i + 1] = imgType[i];
+  }
+  imgType[0] = elemClass;
+  imgType = Array.from(new Set(imgType));
 
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    ignoreDefaultArgs: ["--disable-extensions"],
-    headless: "new",
-  });
+  while (true) {
+    const searchClass = imgType[currentIndex];
+    const searchRegex = `img[src$=${searchClass}]`;
 
-  try {
-    const page = await browser.newPage();
-    await page.goto(`${url}`, {
-      waitUntil: "domcontentloaded",
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      ignoreDefaultArgs: ["--disable-extensions"],
+      headless: "new",
     });
 
-    const imgSrcs = await page.$$eval(`img${elemClass}`, (imgs) => {
-      return imgs.map((img) => img.src);
-    });
+    try {
+      const page = await browser.newPage();
+      await page.goto(`${url}`, {
+        waitUntil: "domcontentloaded",
+      });
 
-    if (imgSrcs.length > 0) {
-      console.log(`elemments with class ${elemClass}`);
-      imgSrcs.forEach((src) => data.push(src));
-    } else {
-      console.log(
-        `No img elemments with class ${elemClass} found on the page.`
-      );
+      const imgSrcs = await page.$$eval(`${searchRegex}`, (imgs) => {
+        return imgs.map((img) => img.src);
+      });
+
+      if (imgSrcs.length > 4) {
+        console.log(`elemments with class ${searchClass}`);
+        imgSrcs.forEach((src) => data.push(src));
+      } else {
+        console.log(
+          `No img elemments with class ${searchClass} found on the page.`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      await browser.close();
+      return;
+    } finally {
+      await browser.close();
+      currentIndex = currentIndex + 1;
+      if (data.length > 4 || currentIndex > 5) {
+        console.log(data);
+        return data;
+      }
     }
-
-    return data;
-  } catch (error) {
-    console.log(error);
-  } finally {
-    await browser.close();
   }
 };
-totalChapterLinks();
 
+testingThree();
 export { advScraper, scrapeTotal, totalChapterLinks };

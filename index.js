@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import advMangaWeb from "./contorolers/advMangaWeb.js";
-import { advScraper } from "./advanceScrapper.js";
+// import { advScraper } from "./advanceScrapper.js";
+import websiteScraper from "./pupeteerCherio.js";
 
 dotenv.config();
 
@@ -25,7 +26,21 @@ app.post("/advCreateManga", async (req, res) => {
     if (!data) {
       return res.status(400).json({ error: "Invalid request data." });
     }
-    let result = await advMangaWeb(data);
+    const { url, blockClass, nextSelecter, mangaClass } = data;
+    let allManga = await websiteScraper(url, nextSelecter, blockClass);
+
+    let result;
+
+    allManga.forEach(async (element) => {
+      const { href, imgSrc, title } = element;
+      result = await advMangaWeb({
+        websiteName: href,
+        mangaCover: imgSrc,
+        mangaName: title,
+        mangaClass,
+        mangaType: "manhwa",
+      });
+    });
 
     return res.status(200).json({ message: result });
   } catch (error) {
@@ -34,24 +49,4 @@ app.post("/advCreateManga", async (req, res) => {
       .status(500)
       .json({ error: "An error occurred while creating the manga." });
   }
-});
-
-app.get("/", (req, res) => {
-  res.json({ working: "up and running here" });
-});
-
-app.post("/advChapter", async (req, res) => {
-  try {
-    const url = `${req.body.url}`;
-    const elemClass = `${req.body.chapClass}`;
-
-    const chapter = await advScraper(url, elemClass);
-    res.json(chapter);
-  } catch (error) {
-    console.log("somthing went wrong");
-  }
-});
-
-app.listen(port, () => {
-  console.log(`port listening on port ${port}`);
 });
