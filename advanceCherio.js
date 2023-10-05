@@ -1,3 +1,6 @@
+import axios from "axios";
+import cheerio from "cheerio";
+
 const scrapeTotal = async (url) => {
   const elemClass = "a[href*=chapter]";
   let data = [];
