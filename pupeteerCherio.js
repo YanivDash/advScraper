@@ -7,7 +7,7 @@ const websiteScraper = async (url, nextSelecter, blockClass) => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     ignoreDefaultArgs: ["--disable-extensions"],
-    headless: false,
+    headless: "new",
   });
 
   let scrapedLinks = [];
