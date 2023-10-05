@@ -38,16 +38,16 @@ app.post("/advCreateManga", async (req, res) => {
 
     let result;
 
-    allManga.forEach((element) => {
+    for (const element of allManga) {
       const { href, imgSrc, title } = element;
-      result = advMangaWeb({
+      result = await advMangaWeb({
         websiteName: href,
         mangaCover: imgSrc,
         mangaName: title,
         mangaClass,
         mangaType,
       });
-    });
+    }
 
     return res.status(200).json({ message: result });
   } catch (error) {
