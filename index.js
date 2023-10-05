@@ -38,9 +38,9 @@ app.post("/advCreateManga", async (req, res) => {
 
     let result;
 
-    allManga.forEach(async (element) => {
+    allManga.forEach((element) => {
       const { href, imgSrc, title } = element;
-      result = await advMangaWeb({
+      result = advMangaWeb({
         websiteName: href,
         mangaCover: imgSrc,
         mangaName: title,
