@@ -8,6 +8,8 @@ import getAllManga from "./contorolers/getAllManga.js";
 import updateTotalChapter from "./contorolers/updateTotalChapter.js";
 import { updateChapter } from "./advanceCherio.js";
 import cron from "node-cron";
+import deleteDuplicate from "./contorolers/delete.js";
+import replicateAll from "./contorolers/replicateAll.js";
 
 dotenv.config();
 
@@ -44,6 +46,7 @@ app.post("/advCreateManga", async (req, res) => {
 
     for (const element of allManga) {
       const { href, imgSrc, title } = element;
+
       result = await advMangaWeb({
         websiteName: href,
         mangaCover: imgSrc,
@@ -89,6 +92,80 @@ const chapterUpdate = async () => {
 cron.schedule("8 17 * * *", (err) => {
   console.log("Running API request...");
   chapterUpdate();
+});
+
+app.delete("/deleteDuplicate", async (req, res) => {
+  try {
+    const data = await getAllManga();
+    if (!data || data.length <= 0) {
+      console.log("no data found in database");
+      return res.status(400).json({ error: "Invalid request data." });
+    }
+
+    let titleArray = [];
+    let duplicate = [];
+    data.forEach((element) => {
+      if (titleArray.includes(element.mangaName.toLowerCase())) {
+        duplicate.push(element);
+      } else {
+        titleArray.push(element.mangaName.toLowerCase());
+      }
+    });
+
+    console.log(duplicate);
+
+    for (const element of duplicate) {
+      await deleteDuplicate(element.id);
+    }
+
+    return res.status(200).json({ messgae: "deleted all duplicates" });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({ error: "error while deleting" });
+  }
+});
+
+app.put("replicateAll", async (req, res) => {
+  try {
+    const data = req.body;
+    if (!data) {
+      return res.status(400).json({ error: "Invalid request data." });
+    }
+
+    const mangaData = await getAllManga();
+    if (!data || data.length <= 0) {
+      console.log("no data found in database");
+      return res.status(400).json({ error: "Invalid request data." });
+    }
+
+    const { url, blockClass, nextSelecter } = data;
+
+    let allManga = await websiteScraper(url, nextSelecter, blockClass);
+
+    let result;
+
+    for (const element of allManga) {
+      const { href, imgSrc, title } = element;
+
+      for (const obj of mangaData) {
+        if (title === obj.mangaName) {
+          result = await replicateAll({
+            websiteName: href,
+            mangaCover: imgSrc,
+            id: obj.id,
+          });
+          break;
+        }
+      }
+    }
+
+    return res.status(200).json({ message: result });
+  } catch (error) {
+    console.error("An error occurred:", error);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while creating the manga." });
+  }
 });
 
 app.listen(port, () => {
