@@ -133,6 +133,7 @@ const updateChapter = async (url) => {
   } catch (err) {
     console.log(url);
     console.log("error in scraper.js : updateChapter");
+    return [-1, "nothing"];
   }
 };
 

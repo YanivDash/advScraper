@@ -168,6 +168,53 @@ app.put("replicateAll", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+const test = async () => {
+  console.log("here");
+  try {
+    // const data = req.body;
+    // if (!data) {
+    //   // return res.status(400).json({ error: "Invalid request data." });
+    // }
+
+    const mangaData = await getAllManga();
+    // if (!data || data.length <= 0) {
+    //   console.log("no data found in database");
+    //   // return res.status(400).json({ error: "Invalid request data." });
+    // }
+
+    const url = "https://asuratoon.com/";
+    const blockClass = "div.utao.styletwo";
+    const nextSelecter = "a.r";
+
+    let allManga = await websiteScraper(url, nextSelecter, blockClass);
+
+    let result;
+
+    for (const element of allManga) {
+      const { href, imgSrc, title } = element;
+
+      for (const obj of mangaData) {
+        if (title === obj.mangaName) {
+          console.log({ href, imgSrc, title });
+          result = await replicateAll({
+            websiteName: href,
+            mangaCover: imgSrc,
+            id: obj.id,
+          });
+          break;
+        }
+      }
+    }
+
+    // return res.status(200).json({ message: result });
+  } catch (error) {
+    console.error("An error occurred:", error);
+    // return res
+    //   .status(500)
+    //   .json({ error: "An error occurred while creating the manga." });
+  }
+};
+test();
+app.listen(3000, () => {
   console.log(`listening on port ${port}`);
 });
